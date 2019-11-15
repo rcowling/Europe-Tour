@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8' />
+    <title>Display a map</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.5.0/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.5.0/mapbox-gl.css' rel='stylesheet' />
+    <style>
+        body { margin:0; padding:0; }
+        #map { position:absolute; top:0; bottom:0; width:100%; }
+    </style>
+</head>
+<body>
+
+<div id='map'></div>
+<script>
+mapboxgl.accessToken = 'pk.eyJ1IjoicmNvd2xpbmciLCJhIjoiY2lzZ2YwcjZtMDFwdzNvcnQ3bmR3NXFhcCJ9.TI01a_YqNaqKWigFu70x7w';
+var map = new mapboxgl.Map({
+    container: 'map', // container id
+    style: 'mapbox://styles/mapbox/streets-v11', // stylesheet location
+    center: [-74.50, 40], // starting position [lng, lat]
+    zoom: 2 // starting zoom
+});
+
+map.on('load', function () {     
+    map.addSource('countries_new-04tpn5', {
+        'type': 'vector',
+        'url': 'mapbox://rcowling.5b8t421w'
+    });
+     map.addLayer({
+        'id': 'states',
+        'type': 'fill',
+        'source': 'countries_new-04tpn5',
+         'maxzoom': 6,
+        'source-layer': 'countries_new-04tpn5',
+        'layout': {
+            'visibility': 'visible'
+        },
+        paint: {
+            'fill-color': {
+              property: 'SOVEREIGNT',
+              type: 'categorical',
+                stops: [
+                    ['Scotland', '#0065BF'],
+                    ['South Scotland', '#FFFFFF'],
+                    ['Iceland', '#02529C'],
+                    ["Netherlands", "#AE1C28"],
+                    ["Ireland", "#169B62"],
+                    ["North Ireland", "#FF883E"],
+                    ["North England", "#00247D"],
+                    ["South England", "#CF142B"],
+                    ["North France", "#00209F"],
+                    ["South France", "#FFFFFF"],
+                    ["North Spain", "#AA151B"],
+                    ["South Spain", "#F1BF00"],
+                    ["North Germany", "#000000"],
+                    ["South Germany", "#DD0000"],
+                    ["Switzerland", "#FF0000"],
+                    ["North Italy", "#008C45"],
+                    ["Central Italy", "#F4F5F0"],
+                    ["South Italy", "#CD212A"],
+                    ["Greece", "#0D5EAF"],
+                ]
+            },
+            'fill-opacity': ["case",
+                    ["boolean", ["feature-state", "hover"], false],
+                    1,
+                    0.5
+                    ]   
+        }       
+    }, 'state-label'); // Place polygon under these labels.
+});
+</script>
+
+</body>
+</html>
