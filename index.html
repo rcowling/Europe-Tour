@@ -19,34 +19,36 @@ mapboxgl.accessToken = 'pk.eyJ1IjoicmNvd2xpbmciLCJhIjoiY2lzZ2YwcjZtMDFwdzNvcnQ3b
 var map = new mapboxgl.Map({
     container: 'map', // container id
     style: 'mapbox://styles/mapbox/streets-v11', // stylesheet location
-    center: [-74.50, 40], // starting position [lng, lat]
-    zoom: 2 // starting zoom
+    center: [2.2137, 46.2276], // starting position [lng, lat]
+    zoom: 4 // starting zoom
 });
 
 map.on('load', function () {     
-    map.addSource('countries_new-04tpn5', {
+    map.addSource('countries_updated-b09jut', {
         'type': 'vector',
-        'url': 'mapbox://rcowling.5b8t421w'
+        'url': 'mapbox://rcowling.6ipvz9za'
     });
      map.addLayer({
         'id': 'states',
         'type': 'fill',
-        'source': 'countries_new-04tpn5',
+        'source': 'countries_updated-b09jut',
          'maxzoom': 6,
-        'source-layer': 'countries_new-04tpn5',
+        'source-layer': 'countries_updated-b09jut',
         'layout': {
             'visibility': 'visible'
         },
         paint: {
             'fill-color': {
               property: 'SOVEREIGNT',
+              default: 'gray',
               type: 'categorical',
-                stops: [
+                stops: [                    
                     ['Scotland', '#0065BF'],
                     ['South Scotland', '#FFFFFF'],
                     ['Iceland', '#02529C'],
                     ["Netherlands", "#AE1C28"],
                     ["Ireland", "#169B62"],
+                    ["Northern Ireland", "#FF883E"],
                     ["North Ireland", "#FF883E"],
                     ["North England", "#00247D"],
                     ["South England", "#CF142B"],
@@ -54,13 +56,13 @@ map.on('load', function () {
                     ["South France", "#F42A41"],
                     ["North Spain", "#AA151B"],
                     ["South Spain", "#F1BF00"],
-                    ["North Germany", "#000000"],
+                    ["North Germany", "#FFCE00"],
                     ["South Germany", "#DD0000"],
                     ["Switzerland", "#FF0000"],
                     ["North Italy", "#008C45"],
                     ["Central Italy", "#F4F5F0"],
                     ["South Italy", "#CD212A"],
-                    ["Greece", "#0D5EAF"],
+                    ["Greece", "#0D5EAF"],                    
                 ]
             },
             'fill-opacity': ["case",
