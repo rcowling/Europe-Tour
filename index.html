@@ -6,6 +6,7 @@
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.5.0/mapbox-gl.js'></script>
     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.5.0/mapbox-gl.css' rel='stylesheet' />
+    <script src="https://cdn.jsdelivr.net/npm/@turf/turf@5/turf.min.js"></script>
     <style>
         body { margin:0; padding:0; }
         #map { position:absolute; top:0; bottom:0; width:100%; }
@@ -20,8 +21,14 @@ var map = new mapboxgl.Map({
     container: 'map', // container id
     style: 'mapbox://styles/mapbox/streets-v11', // stylesheet location
     center: [2.2137, 46.2276], // starting position [lng, lat]
-    zoom: 4 // starting zoom
+    zoom: 3 // starting zoom
 });
+
+// Add controls to the map
+// Add zoom and rotation controls to the map.
+map.addControl(new mapboxgl.NavigationControl());
+// Add a scale bar
+map.addControl(new mapboxgl.ScaleControl({position: 'bottom-right'}));
 
 map.on('load', function () {     
     map.addSource('countries_updated-b09jut', {
@@ -71,8 +78,241 @@ map.on('load', function () {
                     0.5
                     ]   
         }       
+    }, 'state-label');
+
+    map.addSource('ISL_adm1-3ec9ih', {
+        'type': 'vector',
+        'url': 'mapbox://rcowling.47cp8d3d'
+    });
+     map.addLayer({
+        'id': 'regions',
+        'type': 'fill',
+        'source': 'ISL_adm1-3ec9ih',
+         'minzoom': 6,
+         'maxzoom': 10,
+        'source-layer': 'ISL_adm1-3ec9ih',
+        'layout': {
+            'visibility': 'visible'
+        },
+        paint: {
+            'fill-color': {
+              property: 'NAME_1',
+              default: 'gray',
+              type: 'categorical',
+                stops: [                    
+                    ['Reykjavik', '#0065BF'],
+                    ['South Scotland', '#FFFFFF'],
+                    ['Iceland', '#02529C'],
+                    ["Netherlands", "#AE1C28"],
+                    ["Ireland", "#169B62"],
+                    ["Northern Ireland", "#FF883E"],
+                    ["North Ireland", "#FF883E"],
+                    ["North England", "#00247D"],
+                    ["South England", "#CF142B"],
+                    ["North France", "#00209F"],
+                    ["South France", "#F42A41"],
+                    ["North Spain", "#AA151B"],
+                    ["South Spain", "#F1BF00"],
+                    ["North Germany", "#FFCE00"],
+                    ["South Germany", "#DD0000"],
+                    ["Switzerland", "#FF0000"],
+                    ["North Italy", "#008C45"],
+                    ["Central Italy", "#F4F5F0"],
+                    ["South Italy", "#CD212A"],
+                    ["Greece", "#0D5EAF"],                    
+                ]
+            },
+            'fill-opacity': ["case",
+                    ["boolean", ["feature-state", "hover"], false],
+                    1,
+                    0.5
+                    ]   
+        }       
     }, 'state-label'); // Place polygon under these labels.
+
+    map.addSource('icelandday1route-2kzrmp', {
+    "type": "vector",
+    "url": 'mapbox://rcowling.6rgel17j'
+    });
+ 
+ 
+    map.addLayer({
+        "id": "iceland_day1route",
+        "source": "icelandday1route-2kzrmp",
+        "source-layer": "icelandday1route-2kzrmp",
+        "minzoom": 10,
+        "type": "line",
+        "paint": {
+            "line-width": 3,
+            "line-color": "#7D9B00",
+            'line-dasharray': [2, 1],
+        }
+    }); 
+
+    map.addSource('icelandday1pointsnew-bc8r5c', {
+    "type": "vector",
+    "url": 'mapbox://rcowling.52plrq7b'
+    });
+
+    map.addLayer({
+        id: "icelandday1stops",
+        type: "circle",
+        source: "icelandday1pointsnew-bc8r5c",
+        "source-layer": "icelandday1pointsnew-bc8r5c",
+        "minzoom": 10, 
+        paint: {
+        "circle-color": "#11b4da",
+        "circle-radius": 8,
+        "circle-stroke-width": 1,
+        "circle-stroke-color": "#fff"
+        }
+     });  
+
+    map.addSource('icelandday2route-a1hqpt', {
+    "type": "vector",
+    "url": 'mapbox://rcowling.6e2lnxp1'
+    });
+ 
+ 
+    map.addLayer({
+        "id": "iceland_day2route",
+        "source": "icelandday2route-a1hqpt",
+        "source-layer": "icelandday2route-a1hqpt",
+        "type": "line",
+        "minzoom": 10,
+        "paint": {
+            "line-width": 3,
+            "line-color": "#7D9B00"            
+        }
+    }); 
+
+    map.addSource('icelandday2pointsnew-2j1e3q', {
+    "type": "vector",
+    "url": 'mapbox://rcowling.0219j6ci'
+    });
+
+    map.addLayer({
+        id: "icelandday2stops",
+        type: "circle",
+        source: "icelandday2pointsnew-2j1e3q",
+        "source-layer": "icelandday2pointsnew-2j1e3q", 
+        "minzoom": 10,
+        paint: {
+        "circle-color": "#11b4da",
+        "circle-radius": 8,
+        "circle-stroke-width": 1,
+        "circle-stroke-color": "#fff"
+        }
+     });  
+    map.addSource('icelandday3route-62sasl', {
+    "type": "vector",
+    "url": 'mapbox://rcowling.9r56df5h'
+    });
+ 
+ 
+    map.addLayer({
+        "id": "iceland_day3route",
+        "source": "icelandday3route-62sasl",
+        "source-layer": "icelandday3route-62sasl",
+        "type": "line",
+        "minzoom": 10,
+        "paint": {
+            "line-width": 3,
+            "line-color": "#7D9B00"            
+        }
+    }); 
+
+    map.addSource('icelandday3pointsnew-0uttdp', {
+    "type": "vector",
+    "url": 'mapbox://rcowling.07ymphr2'
+    });
+
+    map.addLayer({
+        id: "icelandday3stops",
+        type: "circle",
+        source: "icelandday3pointsnew-0uttdp",
+        "source-layer": "icelandday3pointsnew-0uttdp", 
+        "minzoom": 10,
+        paint: {
+        "circle-color": "#11b4da",
+        "circle-radius": 8,
+        "circle-stroke-width": 1,
+        "circle-stroke-color": "#fff"
+        }
+     });  
 });
+
+
+map.on('click', 'states', function (e) {
+    var feature = e.features[0]; //get the properties of the clicked feature
+    // get the center point of the clicked polygon    
+    var centroid = turf.centroid(feature);
+    console.log(centroid);
+    map.easeTo({
+            center: centroid.geometry.coordinates,
+            zoom: 6,
+            speed: 2,
+            curve: 1,
+        });
+
+    /*console.log(feature);       
+    new mapboxgl.Popup()
+        .setLngLat(e.lngLat)          
+        .setHTML('<b>' +'Neighborhood Commercial Overlay' + '</b>')                   
+        .addTo(map); // Add the popup to the map     */   
+});    
+
+map.on('click', 'regions', function (e) {
+    var feature = e.features[0]; //get the properties of the clicked feature
+    // get the center point of the clicked polygon    
+    var centroid = turf.centroid(feature);
+    console.log(centroid);
+    map.easeTo({
+            center: centroid.geometry.coordinates,
+            zoom: 10,
+            speed: 2,
+            curve: 1,
+        });
+
+    /*console.log(feature);       
+    new mapboxgl.Popup()
+        .setLngLat(e.lngLat)          
+        .setHTML('<b>' +'Neighborhood Commercial Overlay' + '</b>')                   
+        .addTo(map); // Add the popup to the map     */   
+});    
+
+map.on('click', 'icelandday1stops', function (e) {
+    var feature = e.features[0]; //get the properties of the clicked feature
+    console.log(feature);       
+    new mapboxgl.Popup()
+        .setLngLat(feature.geometry.coordinates)          
+        .setHTML('<b>' +'Name: ' + '</b>' + feature.properties.Name + '<br><b>' +'Description: '
+        + '</b>' + feature.properties.Info + '<b>' + '<br>Keywords: ' + '</b>' + feature.properties.keywords +
+        '<img src="photos/' + feature.properties.photo +'"width="100%" height="100%">')                   
+        .addTo(map); // Add the popup to the map        
+});
+
+map.on('click', 'icelandday2stops', function (e) {
+    var feature = e.features[0]; //get the properties of the clicked feature
+    console.log(feature);       
+    new mapboxgl.Popup()
+        .setLngLat(feature.geometry.coordinates)          
+        .setHTML('<b>' +'Name: ' + '</b>' + feature.properties.Name + '<br><b>' +'Description: '
+        + '</b>' + feature.properties.Info + '<b>' + '<br>Keywords: ' + '</b>' + feature.properties.keywords +
+        '<img src="photos/' + feature.properties.photo +'"width="100%" height="100%">')                   
+        .addTo(map); // Add the popup to the map        
+});        
+
+map.on('click', 'icelandday3stops', function (e) {
+    var feature = e.features[0]; //get the properties of the clicked feature
+    console.log(feature);       
+    new mapboxgl.Popup()
+        .setLngLat(feature.geometry.coordinates)          
+        .setHTML('<b>' +'Name: ' + '</b>' + feature.properties.Name + '<br><b>' +'Description: '
+        + '</b>' + feature.properties.Info + '<b>' + '<br>Keywords: ' + '</b>' + feature.properties.keywords +
+        '<img src="photos/' + feature.properties.photo +'"width="100%" height="100%">')                   
+        .addTo(map); // Add the popup to the map        
+});        
 </script>
 
 </body>
