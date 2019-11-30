@@ -21,7 +21,7 @@ var map = new mapboxgl.Map({
     container: 'map', // container id
     style: 'mapbox://styles/mapbox/streets-v11', // stylesheet location
     center: [2.2137, 46.2276], // starting position [lng, lat]
-    zoom: 3 // starting zoom
+    zoom: 2.5 // starting zoom
 });
 
 // Add controls to the map
@@ -88,8 +88,8 @@ map.on('load', function () {
         'id': 'regions',
         'type': 'fill',
         'source': 'ISL_adm1-3ec9ih',
-         'minzoom': 6,
-         'maxzoom': 10,
+         'minzoom': 5.5,
+         'maxzoom': 8,
         'source-layer': 'ISL_adm1-3ec9ih',
         'layout': {
             'visibility': 'visible'
@@ -101,7 +101,7 @@ map.on('load', function () {
               type: 'categorical',
                 stops: [                    
                     ['Reykjavik', '#0065BF'],
-                    ['South Scotland', '#FFFFFF'],
+                    ['Suðurnes', '#0065BF'],
                     ['Iceland', '#02529C'],
                     ["Netherlands", "#AE1C28"],
                     ["Ireland", "#169B62"],
@@ -239,9 +239,41 @@ map.on('load', function () {
         "circle-stroke-width": 1,
         "circle-stroke-color": "#fff"
         }
-     });  
-});
+     }); 
 
+    map.addSource('icelanddays-3q584i', {
+        'type': 'vector',
+        'url': 'mapbox://rcowling.8i83rztq'
+    });
+     map.addLayer({
+        'id': 'icelanddays',
+        'type': 'fill',
+        'source': 'icelanddays-3q584i',
+         'minzoom': 9,
+         'maxzoom': 10,
+        'source-layer': 'icelanddays-3q584i',
+        'layout': {
+            'visibility': 'visible'
+        },
+        paint: {
+            'fill-color': {
+              property: 'day',
+              default: 'gray',
+              type: 'categorical',
+                stops: [                    
+                    ['1', '#0065BF'],                    
+                    ['2', '#00247D'],
+                    ["3", "#AE1C28"]                                   
+                ]
+            },
+            'fill-opacity': ["case",
+                    ["boolean", ["feature-state", "hover"], false],
+                    1,
+                    0.5
+                    ]   
+        }       
+    }, 'state-label'); // Place polygon under these labels.  
+});
 
 map.on('click', 'states', function (e) {
     var feature = e.features[0]; //get the properties of the clicked feature
@@ -250,7 +282,7 @@ map.on('click', 'states', function (e) {
     console.log(centroid);
     map.easeTo({
             center: centroid.geometry.coordinates,
-            zoom: 6,
+            zoom: 5.5,
             speed: 2,
             curve: 1,
         });
@@ -269,7 +301,7 @@ map.on('click', 'regions', function (e) {
     console.log(centroid);
     map.easeTo({
             center: centroid.geometry.coordinates,
-            zoom: 10,
+            zoom: 9,
             speed: 2,
             curve: 1,
         });
@@ -286,8 +318,7 @@ map.on('click', 'icelandday1stops', function (e) {
     console.log(feature);       
     new mapboxgl.Popup()
         .setLngLat(feature.geometry.coordinates)          
-        .setHTML('<b>' +'Name: ' + '</b>' + feature.properties.Name + '<br><b>' +'Description: '
-        + '</b>' + feature.properties.Info + '<b>' + '<br>Keywords: ' + '</b>' + feature.properties.keywords +
+        .setHTML('<b>' + feature.properties.Name + '</b> ' + feature.properties.Info + ' #'  + feature.properties.keywords +
         '<img src="photos/' + feature.properties.photo +'"width="100%" height="100%">')                   
         .addTo(map); // Add the popup to the map        
 });
