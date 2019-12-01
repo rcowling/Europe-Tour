@@ -313,6 +313,53 @@ map.on('click', 'regions', function (e) {
         .addTo(map); // Add the popup to the map     */   
 });    
 
+map.on('click', 'icelanddays', function (e) {
+    var feature = e.features[0]; //get the properties of the clicked feature
+    // get the center point of the clicked polygon    
+    var centroid = turf.centroid(feature);
+    console.log(centroid);
+    map.easeTo({
+            center: centroid.geometry.coordinates,
+            zoom: 11,
+            speed: 2,
+            curve: 1,
+        });
+
+    console.log(feature.properties.day);
+
+    if (feature.properties.day == '3') {
+        map.setLayoutProperty('icelandday1stops', 'visibility', 'visible');
+        map.setLayoutProperty('iceland_day1route', 'visibility', 'visible');
+        map.setLayoutProperty('icelandday2stops', 'visibility', 'none');
+        map.setLayoutProperty('iceland_day2route', 'visibility', 'none');
+        map.setLayoutProperty('icelandday3stops', 'visibility', 'none');
+        map.setLayoutProperty('iceland_day3route', 'visibility', 'none');
+    }
+
+    if (feature.properties.day == '1') {
+        map.setLayoutProperty('icelandday1stops', 'visibility', 'none');
+        map.setLayoutProperty('iceland_day1route', 'visibility', 'none');
+        map.setLayoutProperty('icelandday2stops', 'visibility', 'none');
+        map.setLayoutProperty('iceland_day2route', 'visibility', 'none');
+        map.setLayoutProperty('icelandday3stops', 'visibility', 'visible');
+        map.setLayoutProperty('iceland_day3route', 'visibility', 'visible');
+    }
+
+    if (feature.properties.day == '2') {
+        map.setLayoutProperty('icelandday1stops', 'visibility', 'none');
+        map.setLayoutProperty('iceland_day1route', 'visibility', 'none');
+        map.setLayoutProperty('icelandday2stops', 'visibility', 'visible');
+        map.setLayoutProperty('iceland_day2route', 'visibility', 'visible');
+        map.setLayoutProperty('icelandday3stops', 'visibility', 'none');
+        map.setLayoutProperty('iceland_day3route', 'visibility', 'none');
+    }
+
+    /*console.log(feature);       
+    new mapboxgl.Popup()
+        .setLngLat(e.lngLat)          
+        .setHTML('<b>' +'Neighborhood Commercial Overlay' + '</b>')                   
+        .addTo(map); // Add the popup to the map     */   
+});    
 map.on('click', 'icelandday1stops', function (e) {
     var feature = e.features[0]; //get the properties of the clicked feature
     console.log(feature);       
@@ -328,8 +375,7 @@ map.on('click', 'icelandday2stops', function (e) {
     console.log(feature);       
     new mapboxgl.Popup()
         .setLngLat(feature.geometry.coordinates)          
-        .setHTML('<b>' +'Name: ' + '</b>' + feature.properties.Name + '<br><b>' +'Description: '
-        + '</b>' + feature.properties.Info + '<b>' + '<br>Keywords: ' + '</b>' + feature.properties.keywords +
+        .setHTML('<b>' + feature.properties.Name + '</b> ' + feature.properties.Info + ' #'  + feature.properties.keywords +
         '<img src="photos/' + feature.properties.photo +'"width="100%" height="100%">')                   
         .addTo(map); // Add the popup to the map        
 });        
@@ -339,8 +385,7 @@ map.on('click', 'icelandday3stops', function (e) {
     console.log(feature);       
     new mapboxgl.Popup()
         .setLngLat(feature.geometry.coordinates)          
-        .setHTML('<b>' +'Name: ' + '</b>' + feature.properties.Name + '<br><b>' +'Description: '
-        + '</b>' + feature.properties.Info + '<b>' + '<br>Keywords: ' + '</b>' + feature.properties.keywords +
+        .setHTML('<b>' + feature.properties.Name + '</b> ' + feature.properties.Info + ' #'  + feature.properties.keywords +
         '<img src="photos/' + feature.properties.photo +'"width="100%" height="100%">')                   
         .addTo(map); // Add the popup to the map        
 });        
