@@ -249,8 +249,8 @@ map.on('load', function () {
         'id': 'icelanddays',
         'type': 'fill',
         'source': 'icelanddays-3q584i',
-         'minzoom': 9,
-         'maxzoom': 10,
+         'minzoom': 8,
+         'maxzoom': 9,
         'source-layer': 'icelanddays-3q584i',
         'layout': {
             'visibility': 'visible'
@@ -301,7 +301,7 @@ map.on('click', 'regions', function (e) {
     console.log(centroid);
     map.easeTo({
             center: centroid.geometry.coordinates,
-            zoom: 9,
+            zoom: 8,
             speed: 1,
             curve: 1,
         });
@@ -347,7 +347,7 @@ map.on('click', 'icelanddays', function (e) {
 
         map.easeTo({
             center: [-22.1173991, 63.9177021],
-            zoom: 11,
+            zoom: 10,
             speed: 1,
             curve: 1,
         });        
@@ -365,7 +365,7 @@ map.on('click', 'icelanddays', function (e) {
         console.log(centroid);
         map.easeTo({
             center: centroid.geometry.coordinates,
-            zoom: 11,
+            zoom: 10,
             speed: 1,
             curve: 1,
             });
